@@ -1,7 +1,15 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { db } from "../firebase.config";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { ReactComponent as ArrowRightIcon } from "../assets/svg/keyboardArrowRightIcon.svg";
 import visibilityIcon from "../assets/svg/visibilityIcon.svg";
+import { async } from "@firebase/util";
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -20,6 +28,53 @@ function SignUp() {
     }));
   };
 
+  // const onSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const auth = getAuth();
+  //     const userCredential = await createUserWithEmailAndPassword(
+  //       auth,
+  //       email,
+  //       password
+  //     );
+  //     const user = userCredential.user;
+  //     updateProfile(auth.currentUser, {
+  //       displayName: name,
+  //     });
+
+  //     navigate("/");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        // ...
+        updateProfile(auth.currentUser, {
+          displayName: name,
+        });
+        // add to the database
+        const formDataCopy = { ...formData };
+        delete formDataCopy.password; // do not need password
+        formDataCopy.timestamp = serverTimestamp();
+
+        setDoc(doc(db, "users", user.uid), formDataCopy);
+
+        navigate("/");
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.log(errorMessage);
+      });
+  };
+
   return (
     <>
       <div className="pageContainer">
@@ -27,16 +82,7 @@ function SignUp() {
           <p className="pageHeader">Welcome Back!</p>
         </header>
 
-        <form>
-          {/* email */}
-          <input
-            type="email"
-            className="emailInput"
-            placeholder="Email"
-            id="email"
-            value={email}
-            onChange={onChange}
-          />
+        <form onSubmit={onSubmit}>
           {/* Name */}
           <input
             type="text"
@@ -46,6 +92,16 @@ function SignUp() {
             value={name}
             onChange={onChange}
           />
+          {/* email */}
+          <input
+            type="email"
+            className="emailInput"
+            placeholder="Email"
+            id="email"
+            value={email}
+            onChange={onChange}
+          />
+
           {/* password */}
           <div className="passwordInputDiv">
             <input
