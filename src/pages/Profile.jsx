@@ -1,19 +1,31 @@
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, SAMLAuthProvider } from "firebase/auth";
 import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 function Profile() {
-  const [user, setUser] = useState(null);
   const auth = getAuth();
+  const [formData, setFormData] = useState({
+    name: auth.currentUser.displayName,
+    email: auth.currentUser.email,
+  });
+  const { name, email } = formData;
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    setUser(auth.currentUser);
-  }, []);
+  const onLogout = () => {
+    auth.signOut();
+    navigate("/");
+  };
 
-  return user ? <h1>{user.displayName}</h1> : "Not Logged in";
-  // <h1>{user.displayName}</h1>;
-  {
-    /* <h3>{user.email}</h3> */
-  }
+  return (
+    <div className="profile">
+      <header className="profileHeader">
+        <p className="pageHeader">My Profile</p>
+        <button type="button" onClick={onLogout} className="logOut">
+          Logout
+        </button>
+      </header>
+    </div>
+  );
 }
 
 export default Profile;
