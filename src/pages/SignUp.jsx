@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -70,8 +71,7 @@ function SignUp() {
         navigate("/");
       })
       .catch((error) => {
-        const errorMessage = error.message;
-        console.log(errorMessage);
+        toast.error("Invalid Credentials");
       });
   };
 
