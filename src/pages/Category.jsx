@@ -13,6 +13,7 @@ import { db } from "../firebase.config";
 import { toast } from "react-toastify";
 import { async } from "@firebase/util";
 import { list } from "postcss";
+import ListingItem from "../components/ListingItem";
 
 function Category() {
   const [listings, setListings] = useState(null);
@@ -70,7 +71,11 @@ function Category() {
           <main>
             <ul className="categorylistings">
               {listings.map((listing) => (
-                <h3 key={listing.id}>{listing.data.name}</h3>
+                <ListingItem
+                  listing={listing.data}
+                  id={listing.id}
+                  key={listing.id}
+                ></ListingItem>
               ))}
             </ul>
           </main>
