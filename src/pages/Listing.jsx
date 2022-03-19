@@ -4,9 +4,16 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { getDoc, doc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase.config";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import "swiper/css/bundle";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+
 import shareIcon from "../assets/svg/shareIcon.svg";
-import { async } from "@firebase/util";
-import { list } from "firebase/storage";
+
+SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
 function Listing() {
   const [listing, setListing] = useState(null);
@@ -38,6 +45,49 @@ function Listing() {
   return (
     <main>
       {/* Slider */}
+      <Swiper
+        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        slidersPerView={1}
+        pagination={{ clickable: true }}
+        navigation
+        scrollbar={{ draggable: true }}
+      >
+        {listing.imageUrls.map((url, index) => (
+          <SwiperSlide key={index}>
+            <div
+              style={{
+                background: `url(${url}) center no-repeat`,
+                backgroundSize: "cover",
+                height: "250px",
+                width: "100%",
+              }}
+              className="swiperSlideDiv"
+            ></div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      {/* <Swiper
+        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        spaceBetween={50}
+        navigation
+        pagination={{ clickable: true }}
+        scrollbar={{ draggable: true }}
+        slidesPerView={1}
+      >
+        {listing.imageUrls.map((url, index) => {
+          console.log(url);
+          <SwiperSlide key={index}>
+            <div
+              style={{
+                background: `url(${url}) center: no-repeat`,
+                backgroundSize: "cover",
+              }}
+              className="swiperSildeDiv"
+            ></div>
+          </SwiperSlide>;
+        })}
+      </Swiper> */}
 
       <div
         className="shareIconDiv"
