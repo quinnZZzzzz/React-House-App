@@ -44,7 +44,6 @@ function Listing() {
 
   return (
     <main>
-      {/* Slider */}
       <Swiper
         modules={[Navigation, Pagination, Scrollbar, A11y]}
         slidersPerView={1}
@@ -66,28 +65,6 @@ function Listing() {
           </SwiperSlide>
         ))}
       </Swiper>
-
-      {/* <Swiper
-        modules={[Navigation, Pagination, Scrollbar, A11y]}
-        spaceBetween={50}
-        navigation
-        pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
-        slidesPerView={1}
-      >
-        {listing.imageUrls.map((url, index) => {
-          console.log(url);
-          <SwiperSlide key={index}>
-            <div
-              style={{
-                background: `url(${url}) center: no-repeat`,
-                backgroundSize: "cover",
-              }}
-              className="swiperSildeDiv"
-            ></div>
-          </SwiperSlide>;
-        })}
-      </Swiper> */}
 
       <div
         className="shareIconDiv"
