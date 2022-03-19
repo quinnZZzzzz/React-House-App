@@ -6,6 +6,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase.config";
 
 import { useNavigate } from "react-router-dom";
@@ -24,7 +25,7 @@ function CreateListing() {
     furnished: false,
     regularPrice: 0,
     discountedPrice: 0,
-    imgaes: {},
+    images: {},
     latitude: 0,
     longitude: 0,
   });
@@ -71,7 +72,7 @@ function CreateListing() {
     setLoading(true);
 
     // Several Checks
-    if (discountedPrice >= regularPrice) {
+    if (+discountedPrice > +regularPrice) {
       setLoading(false);
       toast.error("Discounded price need to be less than regular price");
       return;
@@ -108,7 +109,6 @@ function CreateListing() {
     } else {
       geolocation.lat = latitude;
       geolocation.lng = longitude;
-      location = address;
     }
 
     // Deal with images - upload files in firebase
@@ -157,7 +157,26 @@ function CreateListing() {
       return;
     });
     console.log(imageUrls);
+
+    // generate data to be saved on firestore
+    const formDataCopy = {
+      ...formData,
+      imageUrls,
+      geolocation,
+      timestamp: serverTimestamp(),
+    };
+
+    // Some clean up
+    formDataCopy.location = address;
+    delete formDataCopy.images;
+    delete formDataCopy.address;
+    !formDataCopy.offer && delete formDataCopy.discountedPrice;
+
+    console.log(formDataCopy);
+    const docRef = await addDoc(collection(db, "listings"), formDataCopy);
     setLoading(false);
+    toast.success("Listing Saved");
+    navigate(`/category/${formDataCopy.type}/${docRef.id}`);
   };
 
   const onMutate = (e) => {

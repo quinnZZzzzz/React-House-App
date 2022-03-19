@@ -29,15 +29,17 @@ function Category() {
         // Create a query
         const q = query(
           listingsRef,
-          where("type", "==", params.categoryName),
-          orderBy("timestamp", "desc"),
-          limit(10)
+          where("type", "==", params.categoryName)
+          // orderBy("timestamp", "desc")
         );
 
         // Excute query
         const querySnap = await getDocs(q);
 
         const listings = [];
+
+        console.log(querySnap);
+
         querySnap.forEach((doc) => {
           return listings.push({
             id: doc.id,
@@ -45,6 +47,7 @@ function Category() {
           });
         });
 
+        console.log(listings);
         setListings(listings);
         setLoading(false);
       } catch (error) {
@@ -58,7 +61,7 @@ function Category() {
     <div className="category">
       <header>
         <p className="pageHeader">
-          {params.categoryName === "rent"
+          {params.categoryName == "rent"
             ? "Places for rent"
             : "Places for sale"}
         </p>
