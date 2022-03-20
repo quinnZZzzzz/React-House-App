@@ -100,6 +100,10 @@ function Profile() {
       toast.success("Successfully delete listing(s)");
     }
   };
+
+  const onEdit = (listingId) => {
+    navigate(`/edit-listing/${listingId}`);
+  };
   return (
     <div className="profile">
       {/* profile header  */}
@@ -168,6 +172,7 @@ function Profile() {
                   listing={listing.data}
                   id={listing.id}
                   onDelete={() => onDelete(listing.id)}
+                  onEdit={() => onEdit(listing.id)}
                 />
               ))}
             </ul>
