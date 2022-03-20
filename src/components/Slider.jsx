@@ -50,6 +50,11 @@ function Slider() {
   if (loading) {
     return <h2>Loading...</h2>;
   }
+
+  if (listings.length === 0) {
+    return <></>;
+  }
+
   return (
     listings && (
       <>
