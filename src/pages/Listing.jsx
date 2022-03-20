@@ -46,7 +46,7 @@ function Listing() {
     <main>
       <Swiper
         modules={[Navigation, Pagination, Scrollbar, A11y]}
-        slidersPerView={1}
+        slidesPerView={1}
         pagination={{ clickable: true }}
         navigation
         scrollbar={{ draggable: true }}

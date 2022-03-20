@@ -50,7 +50,7 @@ function ListingItem({ listing, id, onDelete }) {
         <DeteleIcon
           className="removeIcon"
           fill="rgb(231, 76, 60"
-          onClick={onDelete(listing.id, listing.name)}
+          onClick={() => onDelete(listing.id)}
         />
       )}
     </li>
